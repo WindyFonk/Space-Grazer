@@ -6,7 +6,7 @@ using static PlayerController;
 public class Boss1: MonoBehaviour
 {
     private float timeBetweenShot;
-    public GameObject BulletPrefab,BulletFollowPrefab;
+    public GameObject BulletPrefab,BulletFollowPrefab,DeathAnimation,HealthOrb;
     public float startTimeBetweenShot;
 
     public Animator animator;
@@ -44,14 +44,18 @@ public class Boss1: MonoBehaviour
     private void PhaseManager()
     {
 
-        if (health <= 100)
+        if (health <= 200)
         {
             phase =2;
         }
 
-        if (health <= 50)
+        if (health <= 120)
         {
             phase = 3;
+        }
+        if (health <= 0)
+        {
+            phase = 4;
         }
 
         switch(phase)
@@ -66,6 +70,9 @@ public class Boss1: MonoBehaviour
 
             case 3:
                 ThirdPhase();
+                break;
+            case 4:
+                EndLevel();
                 break;
         }
     }
@@ -115,6 +122,21 @@ public class Boss1: MonoBehaviour
     {
         animator.SetTrigger("Third");
         StartCoroutine(shootbounce());
+    }
+
+    private void EndLevel()
+    {
+        animator.SetTrigger("Death");
+        Invoke("Death", 2.5f);
+    }
+
+    private void Death()
+    {
+        Destroy(gameObject);
+        Instantiate(DeathAnimation, transform.position, Quaternion.identity);
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Projectile");
+        foreach (GameObject bullet in bullets)
+            GameObject.Destroy(bullet);
     }
 
 }

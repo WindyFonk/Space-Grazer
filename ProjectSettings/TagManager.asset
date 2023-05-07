@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - GazeZone
   - LevelBound
+  - HealthOrb
   layers:
   - Default
   - TransparentFX

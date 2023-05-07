@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     //health
     public int maxHealth = 4 ;
-    public int currentHealth;
+    public  int currentHealth;
     public HealthBar healthBar;
 
     //audio
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void takeDamage(int damage)
+    public void takeDamage(int damage)
     {
         currentHealth -= damage;
         healthBar.setHealth(currentHealth);
