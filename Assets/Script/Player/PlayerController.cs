@@ -7,11 +7,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float timescale;
     public GameObject hitbox;
     private float speed=5;
     [SerializeField] Rigidbody2D rb;
     private Vector2 moveDirection;
     public Animator animator;
+    public LevelManager levelManager;
+    public bool isAlive;
 
     //shoot
     public GameObject BulletPrefab;
@@ -25,7 +28,7 @@ public class PlayerController : MonoBehaviour
     public HealthBar healthBar;
 
     //audio
-    public AudioSource shoot;
+    public AudioSource shoot,death;
 
     //score
     private static int score;
@@ -45,10 +48,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        isAlive = true;
         PlayerControllerStatic.playerController = this;
         setScores(0);
-
-        animator=GetComponent<Animator>();
 
         currentHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour
         GetComponent<DanmakuCollider>().OnDanmakuCollision += OnDanmakuCollision;
         timeBetweenShot = startTimeBetweenShot;
         offset = new Vector3(0, 0.5f, 0);
+        Time.timeScale = 1;
     }
 
     void OnDanmakuCollision(DanmakuCollisionList collisionList)
@@ -70,6 +73,7 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
+        Time.timeScale = timescale;
         Control();
     }
 
@@ -77,13 +81,14 @@ public class PlayerController : MonoBehaviour
 
     private void Control()
     {
+        //move
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
         moveDirection = new Vector2(horizontal, vertical).normalized;
         rb.velocity = new Vector2(moveDirection.x * speed, moveDirection.y * speed);
 
-        //move
+        
         if (Input.GetKey(KeyCode.LeftShift))
         {
             hitbox.SetActive(true);
@@ -121,9 +126,30 @@ public class PlayerController : MonoBehaviour
 
     public void takeDamage(int damage)
     {
+        if (currentHealth <= 0)
+        {
+            killPlayer();
+        }
+
         currentHealth -= damage;
         healthBar.setHealth(currentHealth);
         animator.SetTrigger("Hit");
+        
+    }
+
+    public void killPlayer()
+    {
+        animator.SetBool("Death",true);
+        rb.freezeRotation = false;
+        rb.AddForce(new Vector2(0, -50f));
+        levelManager.level.Stop();
+        death.Play();
+        Invoke("setAlive", 2);
+    }
+
+    private void setAlive()
+    {
+        isAlive = false;
     }
 
     

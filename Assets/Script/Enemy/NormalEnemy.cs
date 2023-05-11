@@ -19,7 +19,6 @@ public class NormalEnemy : MonoBehaviour
     void Start()
     {
         timeBetweenShot = startTimeBetweenShot;
-        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,7 +28,6 @@ public class NormalEnemy : MonoBehaviour
       
         if (health < 1)
         {
-            animator.SetTrigger("Death");
             Destroy(gameObject);            
             Instantiate(DeathAnimation, transform.position, Quaternion.identity);
             PlayerControllerStatic.playerController.setScores(5);

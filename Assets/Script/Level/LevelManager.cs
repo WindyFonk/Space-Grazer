@@ -11,7 +11,9 @@ public class LevelManager : MonoBehaviour
     public AudioSource level;
     public Transform spawnPos1,spawnPos2,spawnMiddle,spawnLeft,spawnRight;
     public GameObject Enemyhorde1,Enemyhordeside, Enemyhordewontshoot, EnemyhordewontshootLeft,
-        boss1, danmaku1;
+        boss1,textwin,panelwin;
+
+    private Animator animatorpanelWin;
 
     public Boss1 boss1script;
     // Start is called before the first frame update
@@ -19,15 +21,12 @@ public class LevelManager : MonoBehaviour
     {
         level.Play();
         EnemySpawn();
+        animatorpanelWin = panelwin.GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (boss1script.health < 200)
-        {
-            danmaku1.SetActive(false);
-        }
         Invoke("LoadStage2", 60);
     }
 
@@ -46,7 +45,6 @@ public class LevelManager : MonoBehaviour
         Invoke("SpawnEnemyRight", 40);
         Invoke("SpawnEnemyLeft", 42);
         Invoke("SpawnBoss1", 49);
-        Invoke("SpawnBoss1Danmaku", 51);
     }
 
     private void SpawnEnemyRight()
@@ -95,24 +93,27 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    private void SpawnBoss1Danmaku()
-    {
-        danmaku1.SetActive(true);
-
-    }
-
     private void LoadStage2()
     {
         if (GameObject.FindGameObjectsWithTag("Enemy").Length < 1)
         {
+            StartCoroutine(loadWin());
             StartCoroutine(loadScene2());
         }
     }
 
     IEnumerator loadScene2()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
         SceneManager.LoadScene(2);
+    }
+
+    IEnumerator loadWin()
+    {
+        yield return new WaitForSeconds(2);
+        animatorpanelWin.SetTrigger("Win");
+        yield return new WaitForSeconds(2);
+        textwin.SetActive(true);
     }
 
 

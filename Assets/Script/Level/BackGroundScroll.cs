@@ -1,24 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BackGroundScroll : MonoBehaviour
 {
-    [Range(-1f,3f)]
-    public float scrollSpeed =0.5f;
-
-    private float offset;
-    private Material mat;
-
-    void Start()
-    {
-        mat = GetComponent<Renderer>().material;
-    }
-
-    // Update is called once per frame
+    [SerializeField] private RawImage BackGround;
+    [SerializeField] private float _x,_y;
     void Update()
     {
-        offset += Time.deltaTime*scrollSpeed/10f;
-        mat.SetTextureOffset("_MainTex",new Vector2(0,offset));
+        BackGround.uvRect = new Rect(BackGround.uvRect.position + new Vector2(_x, _y) * Time.deltaTime,
+            BackGround.uvRect.size);
     }
 }

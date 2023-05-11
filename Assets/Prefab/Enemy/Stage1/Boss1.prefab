@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 239e1f5de6e0c7a44b00d88a8da1836c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -101,6 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 5053671598756295199, guid: 8ea7d95d44018ce47ac73952ed438323, type: 3}
   BulletFollowPrefab: {fileID: 0}
+  DeathAnimation: {fileID: 0}
+  HealthOrb: {fileID: 0}
   startTimeBetweenShot: 0.2
   animator: {fileID: 7631379325562052446}
   phase: 0
